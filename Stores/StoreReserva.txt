@@ -1,20 +1,21 @@
-Delimiter //
-create procedure Reserva
+DELIMITER //
+CREATE PROCEDURE Reserva
 (IN 
-	ID_Mapa int,
-	Clave int,
-	Fecha_Entrega date
-);
+ 	ID_mapa INT,
+ 	Clave INT,
+ 	FechaHoy date
+	)
 BEGIN
 
-    declare FechaHoy date DEFAULT CURRENT_DATE();
-	declare estado char(45) DEFAULT 'A tiempo';
-
+	DECLARE FechaDev date DEFAULT CURRENT_DATE();
+    DECLARE estatus char(45) DEFAULT ('A tiempo');
+                            
 	insert into Prestamo (ID_libro,Estatus,Fecha_Prestamo,Fecha_Devolucion,Clave_Usuario)values(
-	ID_Mapa,
-	estado,
-	FechaHoy,
-	Fecha_Entrega,
-	Clave
+        ID_mapa,
+        estado,
+        FechaHoy,
+        FechaDev,
+        Clave
 	);
+                            
 END //
