@@ -3,12 +3,12 @@ CREATE PROCEDURE Reserva
 (IN 
  	ID_mapa INT,
  	Clave INT,
- 	FechaHoy date
+ 	FechaDev date
 	)
 BEGIN
 
-	DECLARE FechaDev date DEFAULT CURRENT_DATE();
-    DECLARE estatus char(45) DEFAULT ('A tiempo');
+	DECLARE FechaHoy date DEFAULT CURRENT_DATE();
+    DECLARE estado char(45) DEFAULT ('A tiempo');
                             
 	insert into Prestamo (ID_libro,Estatus,Fecha_Prestamo,Fecha_Devolucion,Clave_Usuario)values(
         ID_mapa,
@@ -19,3 +19,6 @@ BEGIN
 	);
                             
 END //
+
+CALL Reserva (1,1,'2021-12-1');
+select * from prestamo
