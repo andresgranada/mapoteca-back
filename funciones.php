@@ -55,5 +55,5 @@ function Reserva($Reserva)
 {
     $bd = obtenerConexion();
     $sentencia = $bd->prepare("CALL Reserva (?,?,?);");
-    return $sentencia->execute([$Reserva['Titulo'], $Reserva['Tipo'], $Reserva['Empresa']]);
+    return $sentencia->execute([$Reserva['ID_libro'], $Reserva['Estatus'], $Reserva['Fecha_Devolucion']]);
 }
