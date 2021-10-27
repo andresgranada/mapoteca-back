@@ -1,0 +1,20 @@
+Delimiter //
+create procedure Reserva
+(IN 
+	ID_Mapa int,
+	Clave int,
+	Fecha_Entrega date
+);
+BEGIN
+
+    declare FechaHoy date DEFAULT CURRENT_DATE();
+	declare estado char(45) DEFAULT 'A tiempo';
+
+	insert into Prestamo (ID_libro,Estatus,Fecha_Prestamo,Fecha_Devolucion,Clave_Usuario)values(
+	ID_Mapa,
+	estado,
+	FechaHoy,
+	Fecha_Entrega,
+	Clave
+	);
+END //
