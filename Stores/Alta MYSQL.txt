@@ -1,0 +1,68 @@
+DELIMITER //
+CREATE PROCEDURE AltaAdmin
+(in
+	Nombre varchar(45),
+	ApellidoP varchar(45),
+	ApellidoM varchar(45),
+	Usuarios varchar(45),
+	Password varchar(45)
+)
+BEGIN
+	
+	insert into Administrador (Nombre,ApellidoP,ApellidoM,Usuarios,Password) values(
+		Nombre,
+		ApellidoP,
+		ApellidoM,
+		Usuarios,
+		Password
+	);
+END //
+
+
+-----------------------------------------------------
+
+DELIMITER //
+CREATE PROCEDURE AltaUsuario
+(in
+	Nombre varchar(45),
+	ApellidoP varchar(45),
+	ApellidoM varchar(45),
+	Direccion varchar(45),
+	Usuarios varchar(45),
+	Password varchar(45))
+BEGIN
+	
+	insert into Usuario(Nombre,ApellidoP,ApellidoM,Direccion,Usuarios,Password) values(
+		Nombre,
+		ApellidoP,
+		ApellidoM,
+		Direccion,
+		Usuarios,
+		Password
+	);
+END //
+
+
+
+-----------------------------------------------------
+
+DELIMITER //
+CREATE PROCEDURE AltaMapa
+(in
+	Titulo varchar(45),
+	Empresa varchar(45),
+	Tipo varchar(45),
+	Zona_Geografica varchar(45),
+	Escala varchar(45)
+ )
+BEGIN
+	
+	insert into Mapoteca(Titulo,Empresa,Tipo,Zona_Geografica,Escala) values(
+		Titulo,
+		Empresa,
+		Tipo,
+		Zona_Geografica,
+		Escala
+	);
+END //
+

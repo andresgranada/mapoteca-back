@@ -50,3 +50,10 @@ function obtenerConexion()
     $database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
     return $database;
 }
+
+function Reserva($Reserva)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("CALL Reserva (?,?,?);");
+    return $sentencia->execute([$Reserva['Titulo'], $Reserva['Tipo'], $Reserva['Empresa']]);
+}

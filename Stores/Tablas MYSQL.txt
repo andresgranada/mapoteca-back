@@ -1,0 +1,42 @@
+##Tablas
+create table Administrador(
+	ID int AUTO_INCREMENT,
+	Nombre varchar(45),
+	ApellidoP varchar(45),
+	ApellidoM varchar(45),
+	Usuarios varchar(45),
+	Password varchar(45),
+    PRIMARY KEY (ID)
+);
+
+create table Usuario(
+	ID int AUTO_INCREMENT,
+	Nombre varchar(45),
+	ApellidoP varchar(45),
+	ApellidoM varchar(45),
+	Direccion varchar(45),
+	Usuarios varchar(45),
+	Password varchar(45),
+    PRIMARY KEY (ID)
+);
+
+create table Mapoteca(
+	ID int AUTO_INCREMENT,
+	Titulo varchar(45),
+	Empresa varchar(45),
+	Tipo varchar(45),
+	Zona_Geografica varchar(45),
+	Escala varchar(45),
+    PRIMARY KEY (ID)
+);
+
+create table Prestamo(
+	ID int AUTO_INCREMENT,
+    	ID_libro int,
+	FOREIGN KEY (ID_libro) REFERENCES Mapoteca(ID),
+	Estatus varchar(45),
+	Fecha_Prestamo varchar(45),
+	Fecha_Devolucion varchar(45),
+	Clave_Usuario varchar(45),
+    PRIMARY KEY (ID)
+);
