@@ -1,0 +1,8 @@
+##call AltaAdmin ('test1','test1','test1','test1','test1','test1')
+##call AltaUsuario ('test1','test1','test1','test1','test1','test1')
+
+##Corroborar login de admin
+##SELECT * from administrador where usuarios=$Usuario and PASSWORD=$contraseña;
+
+##Corroborar login de admin
+##SELECT * from usuario where usuarios='test1' and PASSWORD='test1';
