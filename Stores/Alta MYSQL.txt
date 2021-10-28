@@ -53,16 +53,18 @@ CREATE PROCEDURE AltaMapa
 	Empresa varchar(45),
 	Tipo varchar(45),
 	Zona_Geografica varchar(45),
-	Escala varchar(45)
+	Escala varchar(45),
+	URL_Imagen varchar(250)
  )
 BEGIN
 	
-	insert into Mapoteca(Titulo,Empresa,Tipo,Zona_Geografica,Escala) values(
+	insert into Mapoteca(Titulo,Empresa,Tipo,Zona_Geografica,Escala,URL_Imagen) values(
 		Titulo,
 		Empresa,
 		Tipo,
 		Zona_Geografica,
-		Escala
+		Escala,
+		URL_Imagen varchar
 	);
 END //
 

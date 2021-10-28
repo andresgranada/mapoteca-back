@@ -1,0 +1,30 @@
+DELIMITER //
+CREATE Procedure Estado
+()
+begin
+	
+	DECLARE id int DEFAULT 1;
+
+	DECLARE cursor1 CURSOR FOR
+	  SELECT Estatus
+	  FROM   Prestamo
+	OPEN cursor1;
+
+	FETCH NEXT FROM cursor1;
+
+	WHILE @@FETCH_STATUS = 0
+	  BEGIN
+      
+	  if ((select Estatus from Prestamo where ID=id)='A tiempo') THEN
+      	if ((select Fecha_Devolucion from Prestamo where ID=id)<CURRENT_TIMESTAMP)) THEN
+				(UPDATE Prestamo SET  Estatus = 'Fuera de tiempo' where ID=id);
+		
+        set id=id+1;
+		FETCH NEXT FROM cursor1;
+	  END
+
+	CLOSE cursor1;
+
+	DEALLOCATE cursor1;
+
+END//
