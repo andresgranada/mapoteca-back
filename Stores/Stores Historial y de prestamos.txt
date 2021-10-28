@@ -1,0 +1,12 @@
+-Historial reservas
+
+select B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro WHERE B.Clave_Usuario=$ID_usuario order by B.Fecha_Prestamo DESC
+
+-Prestamos todos
+
+
+select B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro
+
+-prestamos por id del usario
+
+select B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro WHERE B.Clave_Usuario like %$ID_usuario%

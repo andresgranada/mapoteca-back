@@ -27,12 +27,13 @@ create table Mapoteca(
 	Tipo varchar(45),
 	Zona_Geografica varchar(45),
 	Escala varchar(45),
+	URL_Imagen char(250),
     PRIMARY KEY (ID)
 );
 
 create table Prestamo(
 	ID int AUTO_INCREMENT,
-    	ID_libro int,
+    ID_libro int,
 	FOREIGN KEY (ID_libro) REFERENCES Mapoteca(ID),
 	Estatus varchar(45),
 	Fecha_Prestamo varchar(45),
