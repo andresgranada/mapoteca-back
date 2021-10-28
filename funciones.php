@@ -1,6 +1,19 @@
 <?php
 include_once "Modelos/RespuestaLista.php";
 
+function obtenerConexion()
+{
+    $password = "";
+    $user = "root";
+    $dbName = "test";
+    $database = new PDO('mysql:host=localhost;dbname=' . $dbName, $user, $password);
+    $database->query("set names utf8;");
+    $database->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
+    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+    return $database;
+}
+
 function actualizarMapa($mapa)
 {
     $bd = obtenerConexion();
@@ -36,19 +49,6 @@ function eliminarMapa($id)
     $bd = obtenerConexion();
     $sentencia = $bd->prepare("DELETE FROM mapoteca WHERE id = ?");
     return $sentencia->execute([$id]);
-}
-
-function obtenerConexion()
-{
-    $password = "";
-    $user = "root";
-    $dbName = "test";
-    $database = new PDO('mysql:host=localhost;dbname=' . $dbName, $user, $password);
-    $database->query("set names utf8;");
-    $database->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
-    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-    return $database;
 }
 
 function filtroMapa($titulo, $nombre)
@@ -92,4 +92,18 @@ function obtenerReservas()
     $sentencia = $bd->query("SELECT p.ID, p.ID_libro, m.Titulo as Nombre_mapa, p.Fecha_Prestamo, p.Fecha_Devolucion, p.Clave_Usuario, u.Nombre as Nombre_usuario, u.ApellidoP as Apellido_usuario, p.Estatus from prestamo p INNER JOIN mapoteca m on m.ID = p.ID_libro INNER JOIN usuario u ON u.ID = p.Clave_Usuario");
     return $sentencia->fetchAll();
 
+}
+
+function actualizarReserva($reserva)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("UPDATE prestamo SET ID_libro = ?, Clave_Usuario = ?, Fecha_Devolucion = ? WHERE ID = ?");
+    return $sentencia->execute([$reserva['ID_mapa'], $reserva['ID_usuario'], $reserva['Fecha_devolucion'], $reserva['ID']]);
+}
+
+function eliminarReserva($id)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("DELETE FROM prestamo WHERE id = ?");
+    return $sentencia->execute([$id]);
 }
