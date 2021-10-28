@@ -51,9 +51,45 @@ function obtenerConexion()
     return $database;
 }
 
-function Reserva($Reserva)
+function filtroMapa($titulo, $nombre)
+{
+    if (isset($titulo) && isset($nombre)) {
+        $bd = obtenerConexion();
+        if ($titulo == "Titulo") {
+            $sentencia = $bd->prepare("SELECT * from mapoteca where Titulo LIKE (CONCAT('%',?,'%'))");
+        } elseif ($titulo == "Empresa") {
+            $sentencia = $bd->prepare("SELECT * from mapoteca where Empresa LIKE (CONCAT('%',?,'%'))");
+        } elseif ($titulo == "Tipo") {
+            $sentencia = $bd->prepare("SELECT * from mapoteca where Tipo LIKE (CONCAT('%',?,'%'))");
+        } elseif ($titulo == "Zona_Geografica") {
+            $sentencia = $bd->prepare("SELECT * from mapoteca where Zona_Geografica LIKE (CONCAT('%',?,'%'))");
+        }
+        $sentencia->execute([$nombre]);
+        return $sentencia->fetchAll();
+    }
+
+    obtenerMapas();
+}
+
+function obtenerUsuarios()
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->query("SELECT * FROM usuario");
+    return $sentencia->fetchAll();
+
+}
+
+function Reservar($Reserva)
 {
     $bd = obtenerConexion();
     $sentencia = $bd->prepare("CALL Reserva (?,?,?);");
-    return $sentencia->execute([$Reserva['ID_libro'], $Reserva['Estatus'], $Reserva['Fecha_Devolucion']]);
+    return $sentencia->execute([$Reserva['ID_mapa'], $Reserva['ID_usuario'], $Reserva['Fecha_devolucion']]);
+}
+
+function obtenerReservas()
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->query("SELECT p.ID, p.ID_libro, m.Titulo as Nombre_mapa, p.Fecha_Prestamo, p.Fecha_Devolucion, p.Clave_Usuario, u.Nombre as Nombre_usuario, u.ApellidoP as Apellido_usuario, p.Estatus from prestamo p INNER JOIN mapoteca m on m.ID = p.ID_libro INNER JOIN usuario u ON u.ID = p.Clave_Usuario");
+    return $sentencia->fetchAll();
+
 }
