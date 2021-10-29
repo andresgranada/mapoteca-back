@@ -1,6 +1,19 @@
 <?php
 include_once "Modelos/RespuestaLista.php";
 
+function obtenerConexion()
+{
+    $password = "";
+    $user = "root";
+    $dbName = "test";
+    $database = new PDO('mysql:host=localhost;dbname=' . $dbName, $user, $password);
+    $database->query("set names utf8;");
+    $database->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
+    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+    return $database;
+}
+
 function actualizarMapa($mapa)
 {
     $bd = obtenerConexion();
@@ -36,19 +49,6 @@ function eliminarMapa($id)
     $bd = obtenerConexion();
     $sentencia = $bd->prepare("DELETE FROM mapoteca WHERE id = ?");
     return $sentencia->execute([$id]);
-}
-
-function obtenerConexion()
-{
-    $password = "";
-    $user = "root";
-    $dbName = "test";
-    $database = new PDO('mysql:host=localhost;dbname=' . $dbName, $user, $password);
-    $database->query("set names utf8;");
-    $database->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
-    $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-    return $database;
 }
 
 function filtroMapa($titulo, $nombre)
@@ -144,10 +144,11 @@ function filtroReservas($titulo, $nombre)
 
         $sentencia->execute([$nombre]);
         return $sentencia->fetchAll();
+        }
     }
 
-    obtenerMapas();
+    return obtenerReservas();
 }
 
 
-}
+
