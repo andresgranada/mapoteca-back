@@ -5,7 +5,7 @@ function obtenerConexion()
 {
     $password = "";
     $user = "root";
-    $dbName = "test";
+    $dbName = "proyectoespejo";
     $database = new PDO('mysql:host=localhost;dbname=' . $dbName, $user, $password);
     $database->query("set names utf8;");
     $database->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
@@ -208,4 +208,9 @@ function historialUsuario($id)
 }
 
 
-
+function LimiteReservas($datos)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("select count(*) from prestamo A where A.Estatus<>'A tiempo' and A.Clave_Usuario=$datos");
+    return $sentencia->execute([$datos['Clave_usuario']]);
+}
