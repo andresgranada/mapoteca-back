@@ -79,6 +79,28 @@ function obtenerUsuarios()
 
 }
 
+function obtenerUsuarioId($id)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT * FROM usuario WHERE ID = ?");
+    $sentencia->execute([$id]);
+    return $sentencia->fetchObject();
+}
+
+function actualizarUsuario($usuario)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("UPDATE usuario SET Nombre = ?, ApellidoP = ?, ApellidoM = ?, Direccion = ?, Usuarios = ?, Password = ? WHERE ID = ?");
+    return $sentencia->execute([$usuario['Nombre'], $usuario['ApellidoP'], $usuario['ApellidoM'], $usuario['Direccion'], $usuario['Usuarios'], $usuario['Password'], $usuario['ID']]);
+}
+
+function eliminarUsuario($id)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("DELETE FROM usuario WHERE id = ?");
+    return $sentencia->execute([$id]);
+}
+
 function Reservar($Reserva)
 {
     $bd = obtenerConexion();
@@ -94,11 +116,12 @@ function obtenerReservas()
 
 }
 
-function LoginAdmin($usuario,$password)
+function LoginAdmin($datos)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT * from administrador where usuarios=$usuario and PASSWORD=$password;");
-    return $sentencia->execute();
+    $sentencia = $bd->prepare("SELECT * from administrador where usuarios = ? and Password = ?");
+    $sentencia->execute([$datos['user'], $datos['password']]);
+    return $sentencia->fetchObject();
 }
 
 function AltaAdmin($Datos)
@@ -108,18 +131,34 @@ function AltaAdmin($Datos)
     return $sentencia->execute([Null, $Datos['Nombre'], $Datos['ApellidoP'], $Datos['ApellidoM'], $Datos['Usuario'], $mapa['Password']]);
 }
 
-function LoginUsuario($usuario,$password)
+function obtenerAdminId($id)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT * from usuario where usuarios=$usuario and PASSWORD=$password;");
-    return $sentencia->execute();
+    $sentencia = $bd->prepare("SELECT * FROM Administrador WHERE ID = ?");
+    $sentencia->execute([$id]);
+    return $sentencia->fetchObject();
+}
+
+function LoginUsuario($datos)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT * from usuario where usuarios = ? and Password = ?");
+    $sentencia->execute([$datos['user'], $datos['password']]);
+    return $sentencia->fetchObject();
 }
 
 function AltaUsuarios($Datos)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->prepare("INSERT INTO  usuario (Nombre, ApellidoP, ApellidoM, Direccion, Usuario, Password) VALUES (?, ?, ?, ?, ?,?)");
-    return $sentencia->execute([Null, $Datos['Nombre'], $Datos['ApellidoP'], $Datos['ApellidoM'],$Datos['Direccion'], $Datos['Usuario'], $mapa['Password']]);
+    $sentencia = $bd->prepare("INSERT INTO  usuario (Nombre, ApellidoP, ApellidoM, Direccion, Usuarios, Password) VALUES (?, ?, ?, ?, ?,?)");
+    return $sentencia->execute([$Datos['Nombre'], $Datos['ApellidoP'], $Datos['ApellidoM'],$Datos['Direccion'], $Datos['Usuarios'], $Datos['Password']]);
+}
+
+function actualizarAdmin($usuario)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("UPDATE Administrador SET Nombre = ?, ApellidoP = ?, ApellidoM = ?, Usuarios = ?, Password = ? WHERE ID = ?");
+    return $sentencia->execute([$usuario['Nombre'], $usuario['ApellidoP'], $usuario['ApellidoM'], $usuario['Usuarios'], $usuario['Password'], $usuario['ID']]);
 }
 
 function filtroReservas($titulo, $nombre)
@@ -155,10 +194,17 @@ function filtroReservas($titulo, $nombre)
         } 
         $sentencia->execute([$nombre]);
         return $sentencia->fetchAll();
-        }
     }
 
     return obtenerReservas();
+}
+
+function historialUsuario($id)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, B.Fecha_Prestamo, A.URL_Imagen from mapoteca A join prestamo B on A.ID=B.ID_libro WHERE B.Clave_Usuario = ? order by B.Fecha_Prestamo DESC ");
+    $sentencia->execute([$id]);
+    return $sentencia->fetchAll();
 }
 
 
