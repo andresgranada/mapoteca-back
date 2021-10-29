@@ -94,18 +94,18 @@ function obtenerReservas()
 
 }
 
-function LoginAdmin($Datos)
+function LoginAdmin($usuario,$password)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT * from administrador where usuarios=? and PASSWORD=?;");
-    return $sentencia->execute([$Datos['usuarios'], $Datos['PASSWORD']]);
+    $sentencia = $bd->query("SELECT * from administrador where usuarios=$usuario and PASSWORD=$password;");
+    return $sentencia->execute();
 }
 
-function LoginUsuario($Datos)
+function LoginUsuario($usuario,$password)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->query("SELECT * from usuario where usuarios=? and PASSWORD=?;");
-    return $sentencia->execute([$Datos['usuarios'], $Datos['PASSWORD']]);
+    $sentencia = $bd->query("SELECT * from usuario where usuarios=$usuario and PASSWORD=$password;");
+    return $sentencia->execute();
 }
 
 function filtroReservas($titulo, $nombre)
