@@ -6,6 +6,6 @@ if (!isset($_GET["titulo"]) || !isset($_GET["nombre"])) {
     $reservas = obtenerReservas();
     echo json_encode($reservas);
 } else {
-    $reservaFiltro = filtroMapa($_GET["titulo"], $_GET["nombre"]);
+    $reservaFiltro = filtroReservas($_GET["titulo"], $_GET["nombre"]);
     echo json_encode($reservaFiltro);
 }
