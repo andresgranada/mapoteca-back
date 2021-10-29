@@ -101,6 +101,13 @@ function LoginAdmin($usuario,$password)
     return $sentencia->execute();
 }
 
+function AltaAdmin($Datos)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("INSERT INTO  Administrador (Nombre, ApellidoP, ApellidoM, Usuario, Password) VALUES (?, ?, ?, ?, ?)");
+    return $sentencia->execute([Null, $Datos['Nombre'], $Datos['ApellidoP'], $Datos['ApellidoM'], $Datos['Usuario'], $mapa['Password']]);
+}
+
 function LoginUsuario($usuario,$password)
 {
     $bd = obtenerConexion();
@@ -108,40 +115,44 @@ function LoginUsuario($usuario,$password)
     return $sentencia->execute();
 }
 
+function AltaUsuarios($Datos)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("INSERT INTO  usuario (Nombre, ApellidoP, ApellidoM, Direccion, Usuario, Password) VALUES (?, ?, ?, ?, ?,?)");
+    return $sentencia->execute([Null, $Datos['Nombre'], $Datos['ApellidoP'], $Datos['ApellidoM'],$Datos['Direccion'], $Datos['Usuario'], $mapa['Password']]);
+}
+
 function filtroReservas($titulo, $nombre)
 {
     if (isset($titulo) && isset($nombre)) {
         $bd = obtenerConexion();
-        if ($titulo == "Titulo") {
-            $sentencia = $bd->prepare("SELECT B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, 
+
+        if ($titulo == "Titulo") { //agregar as
+            $sentencia = $bd->prepare("SELECT B.Clave_Usuario as Cedula_Usuario, A.ID AS ID_Mapa,A.Titulo as Titulo_Mapa,A.Zona_Geografica,A.Escala, 
             B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro 
-            WHERE A.Titulo LIKE(CONCAT('%',?,'%')) order by B.Fecha_Prestamo DESC");
+            WHERE (B.Estatus<> 'Entregado') and A.Titulo LIKE(CONCAT('%',?,'%')) order by B.Fecha_Prestamo DESC");
 
         } elseif ($titulo == "Empresa") {
-            $sentencia = $bd->prepare("SELECT B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, 
+            $sentencia = $bd->prepare("SELECT B.Clave_Usuarioas Cedula_Usuario, A.ID AS ID_Mapa,A.Titulo as Titulo_Mapa,A.Zona_Geografica,A.Escala,  
             B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro
-            where A.Empresa LIKE (CONCAT('%',?,'%')) order by B.Fecha_Prestamo DESC");
+            where B.Estatus<> 'Entregado' and A.Empresa LIKE (CONCAT('%',?,'%')) order by B.Fecha_Prestamo DESC");
 
         } elseif ($titulo == "Tipo") {
-            $sentencia = $bd->prepare("SELECT B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, 
+            $sentencia = $bd->prepare("SELECT B.Clave_Usuarioas Cedula_Usuario, A.ID AS ID_Mapa,A.Titulo as Titulo_Mapa,A.Zona_Geografica,A.Escala, 
             B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro
-            where A.Tipo LIKE (CONCAT('%',?,'%'))order by B.Fecha_Prestamo DESC");
+            where B.Estatus<> 'Entregado' and A.Tipo LIKE (CONCAT('%',?,'%'))order by B.Fecha_Prestamo DESC");
 
         } elseif ($titulo == "Zona_Geografica") {
-            $sentencia = $bd->prepare("SELECT B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, 
+            $sentencia = $bd->prepare("SELECT B.Clave_Usuarioas Cedula_Usuario, A.ID AS ID_Mapa,A.Titulo as Titulo_Mapa,A.Zona_Geografica,A.Escala,  
             B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro
-            where A.Zona_Geografica LIKE (CONCAT('%',?,'%'))");
+            where B.Estatus<> 'Entregado' and A.Zona_Geografica LIKE (CONCAT('%',?,'%'))");
 
         }elseif ($titulo == "Cedula") {
-            $sentencia = $bd->prepare("SELECT B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, 
+            $sentencia = $bd->prepare("SELECT B.Clave_Usuarioas Cedula_Usuario, A.ID AS ID_Mapa,A.Titulo as Titulo_Mapa,A.Zona_Geografica,A.Escala, 
             B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro 
-            WHERE A.Titulo LIKE(CONCAT('%',?,'%')) order by B.Fecha_Prestamo DESC");
+            WHERE B.Estatus<> 'Entregado' and A.Titulo LIKE(CONCAT('%',?,'%')) order by B.Fecha_Prestamo DESC");
 
-        }elseif ($titulo == "Cedula") {
-            $sentencia = $bd->prepare("SELECT B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, 
-            B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro 
-            WHERE A.ID LIKE(CONCAT('%',?,'%')) order by B.Fecha_Prestamo DESC");
-
+        } 
         $sentencia->execute([$nombre]);
         return $sentencia->fetchAll();
         }
