@@ -166,7 +166,7 @@ function filtroReservas($titulo, $nombre)
     if (isset($titulo) && isset($nombre)) {
         $bd = obtenerConexion();
 
-        if ($titulo == "Titulo") { //agregar as
+        if ($titulo == "Titulo") { 
             $sentencia = $bd->prepare("SELECT B.Clave_Usuario as Cedula_Usuario, A.ID AS ID_Mapa,A.Titulo as Titulo_Mapa,A.Zona_Geografica,A.Escala, 
             B.Fecha_Prestamo from mapoteca A join prestamo B on A.ID=B.ID_libro 
             WHERE (B.Estatus<> 'Entregado') and A.Titulo LIKE(CONCAT('%',?,'%')) order by B.Fecha_Prestamo DESC");
@@ -210,17 +210,19 @@ function historialUsuario($id)
 
 function LimiteReservas($reserva)
 {
+
     $bd = obtenerConexion();
-    $sentencia = $bd->prepare("SELECT count('*') as Activas from prestamo where (Estatus='A tiempo' or Estatus='Tardio') and Clave_Usuario=?;");
+    $sentencia = $bd->prepare("SELECT count('*') as Activas from prestamo where Clave_Usuario=? and (Estatus='A tiempo' or Estatus='Tardio');");
     $sentencia->execute([$reserva['ID_usuario']]);
-    return $sentencia->fetchObject();
+    return $sentencia->fetch();
+    
 }
 
 
 function Duplica_reserva($reserva)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->prepare("SELECT * from prestamo A joinmapoteca B on A.ID_libro=B.ID where A.Estatus='A tiempo' and B.Titulo=? and A.Clave_Usuario=?");
+    $sentencia = $bd->prepare("SELECT '*' from prestamo A join mapoteca B on A.ID_libro=B.ID where A.Estatus='A tiempo' and B.ID=? and A.Clave_Usuario=?");
     $sentencia->execute([$reserva['ID_mapa']],[$reserva['ID_usuario']]);
     return $sentencia->fetchObject();
 }
