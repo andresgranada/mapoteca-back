@@ -5,7 +5,7 @@ function obtenerConexion()
 {
     $password = "";
     $user = "root";
-    $dbName = "proyectoespejo";
+    $dbName = "test";
     $database = new PDO('mysql:host=localhost;dbname=' . $dbName, $user, $password);
     $database->query("set names utf8;");
     $database->setAttribute(PDO::ATTR_EMULATE_PREPARES, FALSE);
@@ -204,7 +204,7 @@ function historialUsuario($id)
     $bd = obtenerConexion();
     $sentencia = $bd->prepare("SELECT B.Clave_Usuario, A.ID AS ID_Mapa,A.Titulo,A.Titulo,A.Zona_Geografica,A.Escala, B.Fecha_Prestamo, A.URL_Imagen from mapoteca A join prestamo B on A.ID=B.ID_libro WHERE B.Clave_Usuario = ? order by B.Fecha_Prestamo DESC ");
     $sentencia->execute([$id]);
-    return $sentencia->fetchObject();
+    return $sentencia->fetchAll();
 }
 
 
@@ -233,4 +233,13 @@ function Repetido($reserva)
     $sentencia = $bd->prepare("SELECT Titulo FROM prestamo A join mapoteca B on A.ID_libro=B.ID where B.Titulo=? AND A.Clave_Usuario=?;");
     $sentencia->execute([$reserva['Titulo'],$reserva['ID_usuario']]);
     return $sentencia->fetch();
+}
+
+
+function mapasUsuario($id)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT B.URL_Imagen, B.ID as ID_Mapa, B.Titulo,A.Estatus,A.Fecha_Prestamo, A.Fecha_Devolucion, A.Clave_Usuario  FROM prestamo A join mapoteca B on A.ID_libro=B.ID WHERE A.Clave_Usuario= ? AND (A.Estatus='A tiempo' OR A.Estatus='Tardio');");
+    $sentencia->execute([$id]);
+    return $sentencia->fetchAll();
 }
