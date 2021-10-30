@@ -7,35 +7,23 @@ $ReservasTotales = LimiteReservas($reserva);
 
 
 if ($ReservasTotales->Activas<3){
-    echo json_encode('Valido');
-    
+
     $Duplicado = Duplica_reserva($reserva);
     
     if ($Duplicado==false){
-        echo json_encode('Disponible');
 
-        $Repetido = Repetido($reserva);
-
-        if ($Repetido==null){
-
-            echo json_encode('Unico');
-            
-            $resultado = Reservar($reserva);
-            echo json_encode($resultado);
-        }
-        else{
-            echo json_encode('Repetido');
-        }
-
-
+        $resultado = Reservar($reserva);
+        echo json_encode($resultado);
     }
     else{
-        echo json_encode('No disponible');
+        echo json_encode('mapa reservado');
+        return;
     }
 
 }
 
 else{
     echo json_encode('Supero el limite');
+    return;
 };
 

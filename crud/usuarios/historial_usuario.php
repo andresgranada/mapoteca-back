@@ -6,5 +6,12 @@ if (!isset($_GET["id"])) {
 }
 $id = $_GET["id"];
 include_once "../../funciones.php";
-$mapas = historialUsuario($id);
-echo json_encode($mapas);
+
+
+if (!isset($_GET["titulo"]) || !isset($_GET["nombre"])) {
+    $mapas = historialUsuario($id);
+    echo json_encode($mapas);
+} else {
+    $mapasFiltro = filtroHistorialMapa($_GET["id"], $_GET["titulo"], $_GET["nombre"]);
+    echo json_encode($mapasFiltro);
+}
