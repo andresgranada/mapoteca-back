@@ -20,8 +20,8 @@ if ($ReservasTotales->Activas<3){
 
             echo json_encode('Unico');
             
-            // $resultado = Reservar($reserva);
-            // echo json_encode($resultado);
+            $resultado = Reservar($reserva);
+            echo json_encode($resultado);
         }
         else{
             echo json_encode('Repetido');
