@@ -222,7 +222,15 @@ function LimiteReservas($reserva)
 function Duplica_reserva($reserva)
 {
     $bd = obtenerConexion();
-    $sentencia = $bd->prepare("SELECT '*' from prestamo A join mapoteca B on A.ID_libro=B.ID where A.Estatus='A tiempo' and B.ID=? and A.Clave_Usuario=?");
-    $sentencia->execute([$reserva['ID_mapa']],[$reserva['ID_usuario']]);
-    return $sentencia->fetchObject();
+    $sentencia = $bd->prepare("SELECT B.ID as Identificador from prestamo A join mapoteca B on A.ID_libro=B.ID where (A.Estatus='A tiempo' or A.Estatus='Tardio')and B.ID=? LIMIT 1;");
+    $sentencia->execute([$reserva['ID_mapa']]);
+    return $sentencia->fetch();
+}
+
+function Repetido($reserva)
+{
+    $bd = obtenerConexion();
+    $sentencia = $bd->prepare("SELECT Titulo FROM prestamo A join mapoteca B on A.ID_libro=B.ID where B.Titulo=? AND A.Clave_Usuario=?;");
+    $sentencia->execute([$reserva['Titulo'],$reserva['ID_usuario']]);
+    return $sentencia->fetch();
 }
